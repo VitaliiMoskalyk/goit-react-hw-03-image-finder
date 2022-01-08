@@ -1,28 +1,44 @@
-const Modal = ({ content }) => {
-  document.body.style.overflow = "hidden";
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: "0",
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(192,192,192,0.7)",
-      }}
-    >
-      <img
-        width={"60%"}
-        src={content}
-        alt=""
-        style={{
-          position: "fixed",
-          top: "5%",
-          right: "50%",
-          transform: "translate( 50%,5%)",
-          pointerEvents: "none",
-        }}
-      />
-    </div>
-  );
+import { Component } from "react";
+import { Overlay, Modall } from "./modal.styled";
+import propTypes from "prop-types";
+
+class Modal extends Component {
+  componentDidMount() {
+    window.addEventListener("keydown", this.keyDown);
+    document.body.style.overflow = "hidden";
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("keydown", this.keyDown);
+    document.body.style.overflow = "visible";
+  }
+
+  keyDown = (e) => {
+    if (e.code === "Escape") this.click();
+  };
+
+  click = () => {
+    this.props.onClick();
+  };
+
+  close = (e) => {
+    if (e.target === e.currentTarget) this.props.onClick();
+  };
+
+  render() {
+    return (
+      <Overlay onClick={this.close} onClose={this.close}>
+        <Modall>
+          <img width={"100%"} src={this.props.src} alt={this.props.src} />
+        </Modall>
+      </Overlay>
+    );
+  }
+}
+
+Modal.propTypes = {
+  src: propTypes.string.isRequired,
+  onClick: propTypes.func.isRequired,
+  onClose: propTypes.func.isRequired,
 };
 export default Modal;

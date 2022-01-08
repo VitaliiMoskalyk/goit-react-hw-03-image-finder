@@ -2,6 +2,8 @@ import { Component } from "react";
 import axios from "axios";
 import Button from "../Button";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { ImageGalery } from "./imageGallery.styled";
+import propTypes from "prop-types";
 
 class ImageGallery extends Component {
   state = {
@@ -38,14 +40,15 @@ class ImageGallery extends Component {
   };
 
   render() {
+    const { pictures } = this.state;
     return (
       <>
-        {this.state.pictures.length >= 1 && (
+        {pictures.length >= 1 && (
           <>
-            <ul>{this.props.children}</ul>
+            <ImageGalery>{this.props.children}</ImageGalery>
             <Button
-              arrayLength={this.state.pictures.length}
-              pagination={this.pagination}
+              arrayLength={pictures.length}
+              paginationFn={this.pagination}
             />
           </>
         )}
@@ -53,5 +56,13 @@ class ImageGallery extends Component {
     );
   }
 }
+
+ImageGallery.propTypes = {
+  value: propTypes.string,
+  loader: propTypes.func,
+  givePictures: propTypes.func,
+  pictures: propTypes.array,
+  page: propTypes.number,
+};
 
 export default ImageGallery;

@@ -6,7 +6,10 @@ import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App style={{display:"grid",
+  gridTemplateColumns: "1fr",
+  gridGap: "16px",
+  paddingBottom: "24px" }}/>
   </React.StrictMode>,
   document.getElementById('root')
 );

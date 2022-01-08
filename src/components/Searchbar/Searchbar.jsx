@@ -1,4 +1,12 @@
 import { Component } from "react";
+import {
+  SearchForm,
+  SearchFormButton,
+  SearchFormInput,
+  Searchbarr,
+} from "./Searchbar.styled";
+import propTypes from "prop-types";
+import { MdFindReplace } from "react-icons/md";
 
 class Searchbar extends Component {
   state = {
@@ -18,22 +26,27 @@ class Searchbar extends Component {
 
   render() {
     return (
-      <form onSubmit={this.submitForm}>
-        <button type="submit">
-          <span>Search</span>
-        </button>
-
-        <input
-          type="text"
-          autoComplete="off"
-          autoFocus="on"
-          placeholder="Search images and photos"
-          value={this.state.value}
-          onChange={this.readInputValue}
-        />
-      </form>
+      <Searchbarr>
+        <SearchForm onSubmit={this.submitForm}>
+          <SearchFormButton type="submit">
+            <MdFindReplace />
+          </SearchFormButton>
+          <SearchFormInput
+            type="text"
+            autoComplete="off"
+            autoFocus="on"
+            placeholder="Search images and photos"
+            value={this.state.value}
+            onChange={this.readInputValue}
+          />
+        </SearchForm>
+      </Searchbarr>
     );
   }
 }
+
+Searchbar.propTypes = {
+  onSubmit: propTypes.func.isRequired,
+};
 
 export default Searchbar;

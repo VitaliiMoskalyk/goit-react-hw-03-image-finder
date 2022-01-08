@@ -36,8 +36,8 @@ class App extends Component {
     const { value, loader,pictures,modal,contentModal} = this.state;
     
     return (
-      <>
-      <Searchbar onSubmit={this.submitForm} />
+      <section className='App'>
+      <Searchbar  onSubmit={this.submitForm} />
       
         <ImageGallery
           value={value}
@@ -58,14 +58,14 @@ class App extends Component {
       {loader && <Loader
         type="Circles"
         color="#00BFFF"
-        height={100}
-        width={100}
-        timeout={3000} //3 secs
+        height={"80%"}
+        width={"80%"}
+          timeout={3000} //3 secs
         />}
         
-        {modal && <Modal content={contentModal} onClick={this.onClick}/>}
+        {modal && <Modal src={contentModal} onClick={this.onClick} onClose={this.onClick}/>}
         
-    </>)
+    </section>)
   }
 }
 
