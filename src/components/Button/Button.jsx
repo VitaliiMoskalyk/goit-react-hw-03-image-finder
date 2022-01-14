@@ -1,19 +1,17 @@
 import { ButtonLoad } from "./button.styled";
 import propTypes from "prop-types";
 
-const Button = ({ arrayLength, paginationFn }) => {
+const Button = ({ onClickFn, children = null }) => {
   return (
-    arrayLength > 11 && (
-      <ButtonLoad type="button" onClick={paginationFn}>
-        Load more
-      </ButtonLoad>
-    )
+    <ButtonLoad type="button" onClick={onClickFn}>
+      {children}
+    </ButtonLoad>
   );
 };
 
 Button.propTypes = {
-  arrayLength: propTypes.number.isRequired,
-  paginationFn: propTypes.func,
+  onClickFn: propTypes.func.isRequired,
+  children: propTypes.string,
 };
 
 export default Button;

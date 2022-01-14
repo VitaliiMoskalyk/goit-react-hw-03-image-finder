@@ -7,6 +7,8 @@ import {
 } from "./Searchbar.styled";
 import propTypes from "prop-types";
 import { MdFindReplace } from "react-icons/md";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 class Searchbar extends Component {
   state = {
@@ -20,6 +22,10 @@ class Searchbar extends Component {
 
   submitForm = (evt) => {
     evt.preventDefault();
+    if (this.state.value.trim() === "") {
+      toast("Please, enter search word");
+      return;
+    }
     this.props.onSubmit(this.state.value.trim());
     this.setState({ value: "" });
   };
@@ -27,6 +33,7 @@ class Searchbar extends Component {
   render() {
     return (
       <Searchbarr>
+        <ToastContainer />
         <SearchForm onSubmit={this.submitForm}>
           <SearchFormButton type="submit">
             <MdFindReplace />

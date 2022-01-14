@@ -4,7 +4,12 @@ import Searchbar from './components/Searchbar';
 import ImageGallery from './components/ImageGallery';
 import ImageGalleryItem from './components/ImageGalleryItem'
 import Loader from "react-loader-spinner";
-import Modal from './components/Modal'
+import Modal from './components/Modal';
+import Button from './components/Button';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import api from './components/servises/getData';
+import { useEffect, useRef,createRef } from "react";
 
 
 class App extends Component {
@@ -13,57 +18,76 @@ class App extends Component {
     loader: false,
     pictures: [],
     modal: false,
-    contentModal:'',
-  }
+    contentModal: '',
+    page: 1, 
+  };
+ 
+  componentDidUpdate(prevProps, prevState) {
+    const { value, page } = this.state;
+   
+    if (value !== prevState.value || page !== prevState.page) {
 
-  submitForm = (value) => {
-    this.setState({ value })
+      this.setState((prevState) => ({ page: (value === prevState.value) ? (prevState.page) : 1, loader: true }))
+ 
+      
+      api.getData(value,page).then((data) => {
+        this.setState({
+          pictures: page === 1 ? data.hits : [...this.state.pictures, ...data.hits],
+        }); toast(`We are find ${this.state.pictures.length} images from ${data.total}`);
+        })
+        .catch((error) => console.log(error))
+        .finally(() => { this.setState({ loader: false }); })
+    }  
   }
   
-  loader = (loader) => {
-    this.setState({loader})
-  }
-
-  givePictures = (pictures) => {
-    this.setState({pictures})
+  submitForm = (value) => {
+    this.setState({ value,page:1 })
   }
  
-  onClick = (contentModal) => {
-    this.setState({contentModal,modal:!this.state.modal})
+  givelargeImage = (contentModal) => {
+    
+    this.setState((prevState)=>({contentModal,modal:!prevState.modal}))
   }
-  
+
+  pagination = () => {
+    this.setState((prevState) => ({ page:prevState.page + 1 }))
+  };
+ 
   render() {
-    const { value, loader,pictures,modal,contentModal} = this.state;
+    const {loader,pictures,modal,contentModal} = this.state;
     
     return (
       <section className='App'>
+
       <Searchbar  onSubmit={this.submitForm} />
       
-        <ImageGallery
-          value={value}
-          loader={this.loader}
-          givePictures={this.givePictures}>
-          
-          {pictures.map(({id,webformatURL,largeImageURL}) => (
-            <ImageGalleryItem
-              key={id}
-              id={id}
-              webformatURL={webformatURL}
-              largeImageURL={largeImageURL}
-              onClick={this.onClick}
-              />))}
+        {pictures.length >= 1 &&
+          <ImageGallery>
+         
+          {pictures.map(({id,tags,webformatURL,largeImageURL}) => (<ImageGalleryItem
+            key={id}
+            altText={tags}
+            webformat={webformatURL}
+            largeImage={largeImageURL}
+            onClick={this.givelargeImage}
+            />))}
         
-        </ImageGallery>
-
-      {loader && <Loader
+        </ImageGallery>}
+        {pictures.length >= 11 &&
+          <Button onClickFn={this.pagination}>Load more</Button>}
+        
+        {loader &&
+          <Loader className='loader'
         type="Circles"
-        color="#00BFFF"
+        color="#3f51b5"
         height={"80%"}
         width={"80%"}
-          timeout={3000} //3 secs
+          timeout={30000} //3 secs
         />}
         
-        {modal && <Modal src={contentModal} onClick={this.onClick} onClose={this.onClick}/>}
+        {modal &&
+          <Modal src={contentModal} onClick={this.givelargeImage} onClose={this.givelargeImage} />}
+        <ToastContainer />
         
     </section>)
   }

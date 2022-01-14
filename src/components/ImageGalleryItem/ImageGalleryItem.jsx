@@ -1,19 +1,29 @@
 import { Component } from "react";
 import { GalleryItem, ImageGalleryItemImage } from "./imageItem.styled";
 import propTypes from "prop-types";
+import noImage from "../Images/template.png";
 
 class ImageGalleryItem extends Component {
-  click = () => {
-    this.props.onClick(this.props.largeImageURL);
+  static defaultProps = {
+    webformat: noImage,
+    largeImage: noImage,
+    altText: "no description",
   };
+
+  giveLargeImage = () => {
+    this.props.onClick(this.props.largeImage);
+  };
+
   render() {
-    const { webformatURL, id } = this.props;
+    const { webformat, altText } = this.props;
+
     return (
       <GalleryItem>
         <ImageGalleryItemImage
-          src={webformatURL}
-          alt={id}
-          onClick={this.click}
+          src={webformat}
+          alt={altText}
+          loading="lazy"
+          onClick={this.giveLargeImage}
         />
       </GalleryItem>
     );
@@ -21,10 +31,13 @@ class ImageGalleryItem extends Component {
 }
 
 ImageGalleryItem.propTypes = {
-  id: propTypes.number.isRequired,
-  webformatURL: propTypes.string.isRequired,
-  largeImageURL: propTypes.string.isRequired,
-  onClick: propTypes.func.isRequired,
+  webformat: propTypes.string.isRequired,
+  largeImage: propTypes.string.isRequired,
+  altText: propTypes.oneOfType([
+    propTypes.arrayOf(propTypes.string),
+    propTypes.string,
+  ]).isRequired,
+  onClick: propTypes.func,
 };
 
 export default ImageGalleryItem;
