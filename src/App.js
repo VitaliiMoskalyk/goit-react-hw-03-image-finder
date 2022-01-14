@@ -2,15 +2,12 @@
 import { Component } from 'react';
 import Searchbar from './components/Searchbar';
 import ImageGallery from './components/ImageGallery';
-import ImageGalleryItem from './components/ImageGalleryItem'
 import Loader from "react-loader-spinner";
 import Modal from './components/Modal';
 import Button from './components/Button';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api from './components/servises/getData';
-import { useEffect, useRef,createRef } from "react";
-
 
 class App extends Component {
   state = {
@@ -21,15 +18,14 @@ class App extends Component {
     contentModal: '',
     page: 1, 
   };
- 
+  
   componentDidUpdate(prevProps, prevState) {
     const { value, page } = this.state;
-   
+
     if (value !== prevState.value || page !== prevState.page) {
 
       this.setState((prevState) => ({ page: (value === prevState.value) ? (prevState.page) : 1, loader: true }))
- 
-      
+
       api.getData(value,page).then((data) => {
         this.setState({
           pictures: page === 1 ? data.hits : [...this.state.pictures, ...data.hits],
@@ -37,7 +33,7 @@ class App extends Component {
         })
         .catch((error) => console.log(error))
         .finally(() => { this.setState({ loader: false }); })
-    }  
+    } 
   }
   
   submitForm = (value) => {
@@ -50,7 +46,8 @@ class App extends Component {
   }
 
   pagination = () => {
-    this.setState((prevState) => ({ page:prevState.page + 1 }))
+    this.setState((prevState) => ({ page: prevState.page + 1 }));
+    
   };
  
   render() {
@@ -62,17 +59,8 @@ class App extends Component {
       <Searchbar  onSubmit={this.submitForm} />
       
         {pictures.length >= 1 &&
-          <ImageGallery>
-         
-          {pictures.map(({id,tags,webformatURL,largeImageURL}) => (<ImageGalleryItem
-            key={id}
-            altText={tags}
-            webformat={webformatURL}
-            largeImage={largeImageURL}
-            onClick={this.givelargeImage}
-            />))}
+          <ImageGallery items={pictures} modalFn={this.givelargeImage}/>}
         
-        </ImageGallery>}
         {pictures.length >= 11 &&
           <Button onClickFn={this.pagination}>Load more</Button>}
         

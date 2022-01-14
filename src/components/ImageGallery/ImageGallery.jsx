@@ -1,20 +1,27 @@
-import { Component } from "react";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { ImageGalery } from "./imageGallery.styled";
+import ImageGalleryItem from "../ImageGalleryItem";
 import propTypes from "prop-types";
 
-class ImageGallery extends Component {
-  render() {
-    return <ImageGalery>{this.props.children}</ImageGalery>;
-  }
-}
+const ImageGallery = ({ items, modalFn }) => {
+  return (
+    <ImageGalery>
+      {items.map(({ id, tags, webformatURL, largeImageURL }) => (
+        <ImageGalleryItem
+          key={id}
+          altText={tags}
+          webformat={webformatURL}
+          largeImage={largeImageURL}
+          onClick={modalFn}
+        />
+      ))}
+    </ImageGalery>
+  );
+};
 
-// ImageGallery.propTypes = {
-//   value: propTypes.string,
-//   loader: propTypes.func,
-//   givePictures: propTypes.func,
-//   pictures: propTypes.array,
-//   page: propTypes.number,
-// };
+ImageGallery.propTypes = {
+  modalFn: propTypes.func,
+  items: propTypes.array,
+};
 
 export default ImageGallery;
