@@ -59,7 +59,9 @@ class App extends Component {
       <Searchbar  onSubmit={this.submitForm} />
       
         {pictures.length >= 1 &&
-          <ImageGallery items={pictures} modalFn={this.givelargeImage}/>}
+          <ImageGallery
+            items={pictures}
+            modalFn={this.givelargeImage} />}
         
         {pictures.length >= 11 &&
           <Button onClickFn={this.pagination}>Load more</Button>}
@@ -74,7 +76,11 @@ class App extends Component {
         />}
         
         {modal &&
-          <Modal src={contentModal} onClick={this.givelargeImage} onClose={this.givelargeImage} />}
+          <Modal
+            src={contentModal}
+            onClick={this.givelargeImage}
+            onClose={this.givelargeImage} />}
+        
         <ToastContainer />
         
     </section>)
