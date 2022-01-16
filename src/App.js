@@ -33,7 +33,10 @@ class App extends Component {
         })
         .catch((error) => console.log(error))
         .finally(() => { this.setState({ loader: false }); })
+      
+  
     } 
+    
   }
   
   submitForm = (value) => {
@@ -49,6 +52,7 @@ class App extends Component {
     this.setState((prevState) => ({ page: prevState.page + 1 }));
     
   };
+  
  
   render() {
     const {loader,pictures,modal,contentModal} = this.state;
@@ -61,7 +65,8 @@ class App extends Component {
         {pictures.length >= 1 &&
           <ImageGallery
             items={pictures}
-            modalFn={this.givelargeImage} />}
+          modalFn={this.givelargeImage}
+          />}
         
         {pictures.length >= 11 &&
           <Button onClickFn={this.pagination}>Load more</Button>}
